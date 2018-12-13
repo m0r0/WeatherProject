@@ -1,9 +1,12 @@
 package com.moro.weather.di
 
+import androidx.room.Room
+import com.moro.weather.db.WeatherDatabase
 import com.moro.weather.net.OpenWeatherMap
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Response
+import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module.module
 import retrofit2.Retrofit
 import retrofit2.converter.jackson.JacksonConverterFactory
@@ -24,6 +27,10 @@ val netModule = module {
             .addConverterFactory(JacksonConverterFactory.create())
             .baseUrl("api.openweathermap.org/data/2.5/")
             .build().create(OpenWeatherMap::class.java)
+    }
+
+    single {
+        Room.databaseBuilder(androidContext(), WeatherDatabase::class.java, "weather").build()
     }
 
 }
