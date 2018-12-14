@@ -1,5 +1,7 @@
 package com.moro.weather.net
 
+import com.moro.weather.net.pojo.WeatherNet
+import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Query
 
@@ -11,5 +13,5 @@ import retrofit2.http.Query
  */
 interface OpenWeatherMap {
     @GET("weather")
-    fun getWeatherForCity(@Query("q") city: String)
+    fun getWeatherForCity(@Query("q") city: String) : Call<WeatherNet>
 }

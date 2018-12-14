@@ -1,6 +1,8 @@
 package com.moro.weather
 
 import android.app.Application
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.module.kotlin.KotlinModule
 import com.moro.weather.di.netModule
 import org.koin.android.ext.android.startKoin
 
@@ -13,6 +15,7 @@ import org.koin.android.ext.android.startKoin
 class WeatherProjectApp : Application() {
     override fun onCreate() {
         super.onCreate()
+        ObjectMapper().registerModule(KotlinModule())
         startKoin(this, listOf(netModule))
     }
 }
