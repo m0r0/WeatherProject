@@ -1,6 +1,8 @@
 package com.moro.weather.db.pojo
 
+import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.moro.weather.net.pojo.WeatherInfo
 
 /**
  * Created with Android Studio.
@@ -8,10 +10,19 @@ import androidx.room.PrimaryKey
  * Date: 12/12/18
  * Time: 7:30 PM
  */
+@Entity
 data class Weather(
-    @PrimaryKey var uid: Int,
+    @PrimaryKey var cityId: Int,
     var city: String,
     var temperature: String,
     var icon: String,
     var description: String
-)
+) {
+    constructor(weatherInfo: WeatherInfo) : this(
+        weatherInfo.id,
+        weatherInfo.name,
+        "${weatherInfo.main.temp}˚",
+        weatherInfo.weather[0].icon,
+        weatherInfo.weather[0].description
+    )
+}

@@ -1,7 +1,7 @@
 package com.moro.weather.net
 
-import com.moro.weather.net.pojo.WeatherNet
-import retrofit2.Call
+import androidx.lifecycle.LiveData
+import com.moro.weather.net.pojo.WeatherResponse
 import retrofit2.http.GET
 import retrofit2.http.Query
 
@@ -12,6 +12,6 @@ import retrofit2.http.Query
  * Time: 7:12 PM
  */
 interface OpenWeatherMap {
-    @GET("weather")
-    fun getWeatherForCity(@Query("q") city: String) : Call<WeatherNet>
+    @GET("group")
+    fun getWeatherForCities(@Query("id") cityIds: String): LiveData<ApiResponse<WeatherResponse>>
 }

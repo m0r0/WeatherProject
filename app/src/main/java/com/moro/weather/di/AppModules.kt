@@ -1,12 +1,20 @@
 package com.moro.weather.di
 
 import androidx.room.Room
+import com.fasterxml.jackson.databind.DeserializationFeature
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import com.moro.weather.WeatherRepository
 import com.moro.weather.db.WeatherDatabase
+import com.moro.weather.main.MainViewModel
 import com.moro.weather.net.OpenWeatherMap
+import com.moro.weather.util.AppExecutors
+import com.moro.weather.util.LiveDataCallAdapterFactory
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Response
+import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.android.ext.koin.androidContext
+import org.koin.androidx.viewmodel.ext.koin.viewModel
 import org.koin.dsl.module.module
 import retrofit2.Retrofit
 import retrofit2.converter.jackson.JacksonConverterFactory
@@ -19,13 +27,22 @@ import retrofit2.converter.jackson.JacksonConverterFactory
  */
 
 
-val netModule = module {
+val singletonModule = module {
 
     single {
         Retrofit.Builder()
-            .client(OkHttpClient.Builder().addInterceptor { chain -> addApiKeyToQueryParams(chain) }.build())
-            .addConverterFactory(JacksonConverterFactory.create())
-            .baseUrl("api.openweathermap.org/data/2.5/")
+            .client(OkHttpClient.Builder()
+                .addInterceptor { chain -> addApiKeyToQueryParams(chain) }
+                .addInterceptor(HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BODY })
+                .build()
+            )
+            .addCallAdapterFactory(LiveDataCallAdapterFactory())
+            .addConverterFactory(
+                JacksonConverterFactory.create(
+                    jacksonObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+                )
+            )
+            .baseUrl("http://api.openweathermap.org/data/2.5/")
             .build().create(OpenWeatherMap::class.java)
     }
 
@@ -33,6 +50,14 @@ val netModule = module {
         Room.databaseBuilder(androidContext(), WeatherDatabase::class.java, "weather").build()
     }
 
+    single { WeatherRepository(get(), get(), get()) }
+
+    single { AppExecutors() }
+
+}
+
+val viewModels = module {
+    viewModel { MainViewModel(get()) }
 }
 
 fun addApiKeyToQueryParams(chain: Interceptor.Chain): Response {

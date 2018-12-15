@@ -10,7 +10,7 @@ import com.moro.weather.db.pojo.Weather
  * Date: 12/13/18
  * Time: 11:50 PM
  */
-@Database(entities = arrayOf(Weather::class), version = 1)
+@Database(entities = [Weather::class], version = 1)
 abstract class WeatherDatabase : RoomDatabase() {
     abstract fun weatherDao() : WeatherDao
 }
