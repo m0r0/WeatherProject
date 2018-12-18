@@ -13,5 +13,5 @@ import retrofit2.http.Query
  */
 interface OpenWeatherMap {
     @GET("group")
-    fun getWeatherForCities(@Query("id") cityIds: String): LiveData<ApiResponse<WeatherResponse>>
+    fun getWeatherForCities(@Query("id", encoded = true) cityIds: String): LiveData<ApiResponse<WeatherResponse>>
 }

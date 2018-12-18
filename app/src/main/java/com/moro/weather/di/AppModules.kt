@@ -1,6 +1,8 @@
 package com.moro.weather.di
 
 import androidx.room.Room
+import com.bumptech.glide.annotation.GlideModule
+import com.bumptech.glide.module.AppGlideModule
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.moro.weather.WeatherRepository
@@ -9,6 +11,7 @@ import com.moro.weather.main.MainViewModel
 import com.moro.weather.net.OpenWeatherMap
 import com.moro.weather.util.AppExecutors
 import com.moro.weather.util.LiveDataCallAdapterFactory
+import com.moro.weather.util.WEATHER_API
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Response
@@ -42,7 +45,7 @@ val singletonModule = module {
                     jacksonObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
                 )
             )
-            .baseUrl("http://api.openweathermap.org/data/2.5/")
+            .baseUrl(WEATHER_API)
             .build().create(OpenWeatherMap::class.java)
     }
 
@@ -59,6 +62,9 @@ val singletonModule = module {
 val viewModels = module {
     viewModel { MainViewModel(get()) }
 }
+
+@GlideModule
+class WeatherGlideModule : AppGlideModule()
 
 fun addApiKeyToQueryParams(chain: Interceptor.Chain): Response {
     val oldRequest = chain.request()

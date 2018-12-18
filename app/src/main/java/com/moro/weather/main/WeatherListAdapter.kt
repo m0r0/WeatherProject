@@ -2,10 +2,14 @@ package com.moro.weather.main
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.ImageView
+import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.moro.weather.BR
 import com.moro.weather.databinding.ItemWeatherBinding
 import com.moro.weather.db.pojo.Weather
+import com.moro.weather.di.GlideApp
+import com.moro.weather.util.WEATHER_IMAGE_URL_PREFIX
 import java.util.*
 
 /**
@@ -37,3 +41,10 @@ class WeatherListAdapter : RecyclerView.Adapter<WeatherViewHolder>() {
 }
 
 class WeatherViewHolder(val binding: ItemWeatherBinding) : RecyclerView.ViewHolder(binding.root)
+
+@BindingAdapter("image_id")
+fun loadImage(imageView: ImageView, imageId: String) {
+    GlideApp.with(imageView.context)
+        .load("$WEATHER_IMAGE_URL_PREFIX$imageId.png")
+        .into(imageView)
+}
