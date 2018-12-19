@@ -23,19 +23,26 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val list = DataBindingUtil.setContentView<ActivityMainBinding>(this, R.layout.activity_main).list
+        val viewRoot = DataBindingUtil.setContentView<ActivityMainBinding>(this, R.layout.activity_main)
+        val swipeRefreshLayout = viewRoot.swipeContainer
+        swipeRefreshLayout.setOnRefreshListener { onRefreshTriggered() }
+        val list = viewRoot.list
         val adapter = WeatherListAdapter()
         list.layoutManager = (LinearLayoutManager(this))
         list.adapter = adapter
         mainViewModel.weather().observe(this, Observer {
             when {
-                it.isSuccess() -> adapter.submitData(it.data ?: Collections.emptyList())
+                it.isSuccess() -> {
+                    swipeRefreshLayout.isRefreshing = false
+                    adapter.submitData(it.data ?: Collections.emptyList())
+                }
                 it.isFailure() -> {
+                    swipeRefreshLayout.isRefreshing = false
                     Log.e(javaClass.canonicalName, it.error)
                     Toast.makeText(this, it.error, Toast.LENGTH_LONG).show()
                 }
                 else -> {
-                    //TODO Show progress
+                    swipeRefreshLayout.isRefreshing = true
                 }
             }
         })
