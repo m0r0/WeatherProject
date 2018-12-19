@@ -23,13 +23,15 @@ class WeatherRepository(
     private val db: WeatherDatabase,
     private val appExecutors: AppExecutors
 ) {
-    private val weatherRateLimiter = RateLimiter<String>(3, TimeUnit.SECONDS)
+    private val weatherRateLimiter = RateLimiter<String>(1, TimeUnit.SECONDS)
 
-    fun loadWeather(vararg cityIds: String): LiveData<Resource<List<Weather>>> {
-        val cityIdsParam = cityIds.joinToString(",")
+    fun loadWeather(cityIds: String): LiveData<Resource<List<Weather>>> =
+        getWeather(cityIds)
+
+    private fun getWeather(cityIds: String): LiveData<Resource<List<Weather>>> {
         return object : NetworkBoundResource<List<Weather>, WeatherResponse>(appExecutors) {
             override fun createCall(): LiveData<ApiResponse<WeatherResponse>> =
-                retrofit.getWeatherForCities(cityIdsParam)
+                retrofit.getWeatherForCities(cityIds)
 
             override fun saveCallResult(item: WeatherResponse) {
                 db.weatherDao().insertWeather(item.list.map { Weather(it) })
@@ -38,7 +40,11 @@ class WeatherRepository(
             override fun loadFromDb(): LiveData<List<Weather>> = db.weatherDao().getAll()
 
             override fun shouldFetch(data: List<Weather>?): Boolean =
-                data == null || data.isEmpty() || weatherRateLimiter.shouldFetch(cityIdsParam)
+                data == null || data.isEmpty() || weatherRateLimiter.shouldFetch(cityIds)
+
+            override fun onFetchFailed() {
+                weatherRateLimiter.reset(cityIds)
+            }
         }.asLiveData()
     }
 }

@@ -15,6 +15,9 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
+    private val kyivId = "703448"
+    private val londonId = "2643744"
+    private val torontoId = "6167865"
 
     private val mainViewModel by viewModel<MainViewModel>()
 
@@ -24,7 +27,7 @@ class MainActivity : AppCompatActivity() {
         val adapter = WeatherListAdapter()
         list.layoutManager = (LinearLayoutManager(this))
         list.adapter = adapter
-        mainViewModel.getWeather().observe(this, Observer {
+        mainViewModel.weather().observe(this, Observer {
             when {
                 it.isSuccess() -> adapter.submitData(it.data ?: Collections.emptyList())
                 it.isFailure() -> {
@@ -36,6 +39,7 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         })
+        mainViewModel.setCities(kyivId, londonId, torontoId)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -51,6 +55,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun onRefreshTriggered(): Boolean {
+        mainViewModel.forceWeatherUpdate()
         return true
     }
 }
