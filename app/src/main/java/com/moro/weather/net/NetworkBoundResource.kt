@@ -43,6 +43,7 @@ abstract class NetworkBoundResource<StorageType, ResponseType>
         val dbSource = loadFromDb()
         result.addSource(dbSource) { data ->
             result.removeSource(dbSource)
+            setValue(Resource.success(data))
             if (shouldFetch(data)) {
                 fetchFromNetwork(dbSource)
             } else {

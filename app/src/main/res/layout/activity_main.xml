@@ -1,17 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/swipe_container"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:animateLayoutChanges="true">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/list"
+        <TextView
+            android:id="@+id/offline_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:context=".main.MainActivity" />
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+            android:layout_height="32dp"
+            android:background="@color/colorOfflineBar"
+            android:drawableStart="@drawable/ic_error_outline_black_24dp"
+            android:drawablePadding="5dp"
+            android:gravity="center_vertical"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:visibility="gone"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Offline mode. Last updated at 15:43"
+            tools:visibility="visible" />
 
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipe_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/offline_view">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:context=".main.MainActivity" />
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

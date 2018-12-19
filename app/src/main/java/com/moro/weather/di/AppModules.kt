@@ -1,5 +1,6 @@
 package com.moro.weather.di
 
+import android.preference.PreferenceManager
 import androidx.room.Room
 import com.bumptech.glide.annotation.GlideModule
 import com.bumptech.glide.module.AppGlideModule
@@ -53,9 +54,11 @@ val singletonModule = module {
         Room.databaseBuilder(androidContext(), WeatherDatabase::class.java, "weather").build()
     }
 
-    single { WeatherRepository(get(), get(), get()) }
+    single { WeatherRepository(get(), get(), get(), get()) }
 
     single { AppExecutors() }
+
+    single { PreferenceManager.getDefaultSharedPreferences(androidContext()) }
 
 }
 
