@@ -1,4 +1,4 @@
-package com.moro.weather
+package com.moro.weather.receiver
 
 import android.content.BroadcastReceiver
 import android.content.Context

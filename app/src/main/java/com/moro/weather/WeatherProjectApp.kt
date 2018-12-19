@@ -6,6 +6,7 @@ import android.net.ConnectivityManager
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.moro.weather.di.singletonModule
 import com.moro.weather.di.viewModels
+import com.moro.weather.receiver.NetworkStateReceiver
 import org.koin.android.ext.android.startKoin
 
 /**

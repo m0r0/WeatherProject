@@ -30,10 +30,7 @@ class WeatherRepository(
     private val weatherRateLimiter = RateLimiter<String>(1, TimeUnit.SECONDS)
 
     fun loadWeather(cityIds: String): LiveData<Resource<List<Weather>>> =
-        getWeather(cityIds)
-
-    private fun getWeather(cityIds: String): LiveData<Resource<List<Weather>>> {
-        return object : NetworkBoundResource<List<Weather>, WeatherResponse>(appExecutors) {
+        object : NetworkBoundResource<List<Weather>, WeatherResponse>(appExecutors) {
             override fun createCall(): LiveData<ApiResponse<WeatherResponse>> =
                 retrofit.getWeatherForCities(cityIds)
 
@@ -53,5 +50,4 @@ class WeatherRepository(
                 weatherRateLimiter.reset(cityIds)
             }
         }.asLiveData()
-    }
 }

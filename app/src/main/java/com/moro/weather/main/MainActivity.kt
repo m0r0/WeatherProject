@@ -11,20 +11,19 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.moro.weather.NetworkStateReceiver
 import com.moro.weather.R
 import com.moro.weather.databinding.ActivityMainBinding
+import com.moro.weather.receiver.NetworkStateReceiver
 import com.moro.weather.util.KEY_LAST_SYNC_TIME
+import com.moro.weather.util.kyivId
+import com.moro.weather.util.londonId
+import com.moro.weather.util.torontoId
 import kotlinx.android.synthetic.main.activity_main.*
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
-    private val kyivId = "703448"
-    private val londonId = "2643744"
-    private val torontoId = "6167865"
-
     private val mainViewModel by viewModel<MainViewModel>()
     private val preferences: SharedPreferences by inject()
 
