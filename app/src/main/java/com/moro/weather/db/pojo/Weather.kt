@@ -25,6 +25,6 @@ data class Weather(
         weatherInfo.name,
         "${weatherInfo.main.temp.fromKelvinToCelsius().roundToInt()}˚",
         weatherInfo.weather[0].icon,
-        weatherInfo.weather[0].description
+        weatherInfo.weather[0].description.capitalize()
     )
 }
