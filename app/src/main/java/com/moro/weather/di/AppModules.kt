@@ -72,7 +72,7 @@ class WeatherGlideModule : AppGlideModule()
 fun addApiKeyToQueryParams(chain: Interceptor.Chain): Response {
     val oldRequest = chain.request()
     val newUrl =
-        oldRequest.url().newBuilder().addQueryParameter("APPID", "a1d1dc41d71e2b1c1d329e64770bf088").build()
+        oldRequest.url().newBuilder().addQueryParameter("APPID", "API_KEY").build()
     val newRequest = oldRequest.newBuilder().url(newUrl).build()
     return chain.proceed(newRequest)
 }
